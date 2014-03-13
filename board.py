@@ -41,6 +41,11 @@ class Board:
             raise MoveException('Source cell is empty')
         if self.get_figure(cell_to) is not None:
             raise MoveException('Destination cell is not empty')
+        if not fig.is_valid_move(cell_from, cell_to):
+            raise MoveException('This move is not possible for figure %s' % str(fig))
+        for cell in fig.intermediate_cells(cell_from, cell_to):
+            if self.get_figure(cell) is not None:
+                raise MoveException('This move is blocked by another figure')
 
         self.remove_figure(cell_from)
         self.place_figure(cell_to, fig)
